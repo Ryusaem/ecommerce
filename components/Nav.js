@@ -1,15 +1,23 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Nav() {
+  // inactiveLink and activeLink are classes for the links
   const inactiveLink = "flex gap-1 p-1";
   const activeLink = inactiveLink + " bg-white text-blue-900 rounded-l-lg";
-
+  // router is the entire router object
+  const router = useRouter();
+  // pathname is a specific property of the router object that contains the path of the current URL (destructuring)
+  const { pathname } = router;
   return (
+    // aside is a tag for sidebars
     <aside className="text-white p-4 pr-0">
+      {/* we are using flex to align the icon and text */}
       <Link
         href={"/"}
         className="flex gap-1 mb-4 mr-4"
       >
+        {/* we are using svg icons from heroicons.com */}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -26,10 +34,11 @@ export default function Nav() {
         </svg>
         <span className="">Ecommerce Admin</span>
       </Link>
+      {/* we are using flex-col to align the links vertically */}
       <nav className="flex flex-col gap-2">
         <Link
           href={"/"}
-          className={activeLink}
+          className={pathname === "/" ? activeLink : inactiveLink}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +58,7 @@ export default function Nav() {
         </Link>
         <Link
           href={"/products"}
-          className={inactiveLink}
+          className={pathname.includes("/products") ? activeLink : inactiveLink}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -69,7 +78,7 @@ export default function Nav() {
         </Link>
         <Link
           href={"/orders"}
-          className={inactiveLink}
+          className={pathname.includes("/orders") ? activeLink : inactiveLink}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -89,7 +98,7 @@ export default function Nav() {
         </Link>
         <Link
           href={"/settings"}
-          className={inactiveLink}
+          className={pathname.includes("/settings") ? activeLink : inactiveLink}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

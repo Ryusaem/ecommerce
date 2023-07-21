@@ -31,7 +31,7 @@ export default async function handle(req, res) {
     region: "eu-north-1",
     // credentials are read from the environment variables
     credentials: {
-      accessKeyId: process.env.S3_ACCESS_KEY,
+      accessKeyId: process.env.S3_ACCESS_KEY_ID,
       secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
     },
   });
@@ -63,7 +63,7 @@ export default async function handle(req, res) {
         ContentType: mime.lookup(file.path),
       })
     );
-    const link = "https://${bucketName}.s3.amazonaws.com/${newFileName}";
+    const link = `https://${bucketName}.s3.amazonaws.com/${newFileName}`;
     links.push(link);
   }
 

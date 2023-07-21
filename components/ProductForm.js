@@ -48,12 +48,17 @@ export default function ProductForm({
 
     // Create a FormData object, which will be sent as the request body to the API endpoint /api/upload.js when the form is submitted
     if (files?.length > 0) {
-      const date = new FormData();
+      const data = new FormData();
       // Append the files to the FormData object
-      files.forEach((file) => data.append("files", file));
+      for (const file of files) {
+        data.append("files", file);
+      }
       // Send a POST request to the API endpoint /api/upload.js with the FormData object as the request body (the files will be sent as multipart/form-data)
-      const res = await axios.post("/api/upload", data);
-      console.log(res.data);
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: data,
+      });
+      console.log(res);
     }
   }
 

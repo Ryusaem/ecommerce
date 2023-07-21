@@ -5,6 +5,7 @@ const ProductSchema = new Schema({
   title: { type: String, required: true },
   description: String,
   price: { type: Number, required: true },
+  images: [{ type: String }],
 });
 
 // The Product model is exported so that it can be imported in other files

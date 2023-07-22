@@ -1,4 +1,5 @@
-// muliparty is a library to parse multipart/form-data requests
+// muliparty is a library to parse (unpack the request multipart/form-data requests
+// multiparty is a library that helps your server understand and handle requests that include files, like when a user wants to upload a photo on a website.
 import multiparty from "multiparty";
 
 // s3 is used to upload the files to S3. S3 is a service provided by AWS to store files in the cloud.

@@ -67,6 +67,10 @@ export default function ProductForm({
     }
   }
 
+  function updateImagesOrder(images) {
+    setImages(images);
+  }
+
   return (
     <form onSubmit={saveProduct}>
       <label>Product name</label>
@@ -81,7 +85,11 @@ export default function ProductForm({
 
       <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">
-        <ReactSortable>
+        <ReactSortable
+          list={images}
+          setList={updateImagesOrder}
+          className="flex flex-wrap gap-1"
+        >
           {!!images?.length &&
             images.map((link) => (
               <div

@@ -22,10 +22,10 @@ export default async function handle(req, res) {
   }
 
   if (method === "PUT") {
-    // Get the name of the category from the request body. It's like req.body.name
+    // req.body is the data sent by the client and we need to destructure it into name and parentCategory, and _id
     const { name, parentCategory, _id } = req.body;
 
-    // Create a new category document in the database with the name provided
+    // Update the category with the id provided with the name and parentCategory provided
     const categoryDoc = await Category.updateOne(
       { _id },
       {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Spinner from "./Spinner";
@@ -10,15 +10,22 @@ export default function ProductForm({
   description: existingDescription,
   price: existingPrice,
   images: existingImages,
+  category: assignedCategory,
 }) {
   // The state variables are used to store the form field values
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
+  const [category, setCategory] = useState(assignedCategory || "");
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImages || []);
   const [goToProducts, setGoToProducts] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const router = useRouter();
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api/categories").then((result) => setCategories(result.data));
+  }, []);
 
   // The createProduct function is called when the form is submitted
   async function saveProduct(ev) {
@@ -26,7 +33,7 @@ export default function ProductForm({
     ev.preventDefault();
 
     // data is an object with the form field names and values
-    const data = { title, description, price, images };
+    const data = { title, description, price, images, category };
 
     if (_id) {
       //update
@@ -82,6 +89,23 @@ export default function ProductForm({
         // ev.target.value is the value of the input field
         onChange={(ev) => setTitle(ev.target.value)}
       />
+
+      <label>Category</label>
+      <select
+        value={category}
+        onChange={(ev) => setCategory(ev.target.value)}
+      >
+        <option value="">Uncategorized</option>
+        {categories.length > 0 &&
+          categories.map((category) => (
+            <option
+              key={category._id}
+              value={category._id}
+            >
+              {category.name}
+            </option>
+          ))}
+      </select>
 
       <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">

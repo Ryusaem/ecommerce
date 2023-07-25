@@ -23,7 +23,7 @@ export default async function handle(req, res) {
 
   // check if the HTTP method is POST
   if (method === "POST") {
-    const { title, description, price, images } = req.body;
+    const { title, description, price, images, category } = req.body;
 
     // create a new product document in MongoDB by calling the create method of the Product model and passing the title, description and price as arguments
     const ProductDoc = await Product.create({
@@ -31,6 +31,7 @@ export default async function handle(req, res) {
       description,
       price,
       images,
+      category,
     });
     res.json(ProductDoc);
   }
@@ -38,11 +39,14 @@ export default async function handle(req, res) {
   // check if the HTTP method is PUT
   if (method === "PUT") {
     // get the title, description, price and _id from the request body
-    const { title, description, price, images, _id } = req.body;
+    const { title, description, price, images, category, _id } = req.body;
 
     // update the product with the given _id
     //updateOne is a Mongoose method that updates a document, the first argument is the query, the second argument is the update
-    await Product.updateOne({ _id }, { title, description, price, images });
+    await Product.updateOne(
+      { _id },
+      { title, description, price, images, category }
+    );
     res.json(true);
   }
 

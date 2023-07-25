@@ -50,18 +50,21 @@ function Categories({ swal }) {
     swal
       .fire({
         title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        didOpen: () => {
-          // run when swal is open
-        },
-        didClose: () => {
-          /// run when swal is closed
-        },
+        text: `Do you want to delete ${category.name}?`,
+        showCancelButton: true,
+        cancelButtonText: "Cancel",
+        confirmButtonText: "Yes, Delete",
+        confirmButtonColor: "#d55",
+        reverseButtons: true,
       })
-      .then((result) => {
+      .then(async (result) => {
         // when confirm button is clicked
-      })
-      .catch((error) => {});
+        if (result.isConfirmed) {
+          const { _id } = category;
+          await axios.delete("api/categories?_id=" + _id);
+          fetchCategories();
+        }
+      });
   }
 
   return (

@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+// axios is a library to make HTTP requests
 import axios from "axios";
+// Spinner is a component that shows a loading spinner
 import Spinner from "./Spinner";
+// ReactSortable is a component that allows to drag and drop elements
 import { ReactSortable } from "react-sortablejs";
 
 export default function ProductForm({
+  // _id is the id of the product that is being edited (if any) and is used to fetch the product data
   _id,
   title: existingTitle,
   description: existingDescription,
@@ -15,19 +19,25 @@ export default function ProductForm({
   // The state variables are used to store the form field values
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
+  // category is the id of the selected category
   const [category, setCategory] = useState(assignedCategory || "");
+  const [productProperties, setProductProperties] = useState({});
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImages || []);
+  // goToProducts is a boolean that is used to redirect the user to the products page after the product has been saved
   const [goToProducts, setGoToProducts] = useState(false);
+  // isUploading is a boolean that is used to show a spinner while the images are being uploaded
   const [isUploading, setIsUploading] = useState(false);
   const router = useRouter();
+  // categories is an array of objects with the category data (name, properties, etc.)
   const [categories, setCategories] = useState([]);
 
+  // Fetch the categories from the API
   useEffect(() => {
     axios.get("/api/categories").then((result) => setCategories(result.data));
   }, []);
 
-  // The createProduct function is called when the form is submitted
+  // the saveProduct function is called when the form is submitted. It sends a POST request to the API endpoint /api/products.js and PUT request to /api/products.js
   async function saveProduct(ev) {
     // Prevent the browser from submitting the form
     ev.preventDefault();
@@ -74,8 +84,30 @@ export default function ProductForm({
     }
   }
 
+  // updateImagesOrder is called when the user drags and drops the images
   function updateImagesOrder(images) {
     setImages(images);
+  }
+
+  // propertiesToFill is an array of objects with the properties that need to be filled for the selected category and its parents
+  const propertiesToFill = [];
+  // If the category is selected, find the category data and the parent categories data. categories is an array of objects with the category data (name, properties, etc.) and category is the id of the selected category
+  if (categories.length > 0 && category) {
+    // Find the category data
+    let catInfo = categories.find(({ _id }) => _id === category);
+    // Add the properties of the category and its parents to the propertiesToFill array
+    propertiesToFill.push(...catInfo.properties);
+    // Loop through the parent categories until there are no more parents
+    while (catInfo?.parent?._id) {
+      // Find the parent category data
+      const parentCat = categories.find(
+        ({ _id }) => _id === catInfo?.parent?._id
+      );
+      // Add the properties of the parent category to the propertiesToFill array
+      propertiesToFill.push(...parentCat.properties);
+      // Set the parent category as the current category
+      catInfo = parentCat;
+    }
   }
 
   return (
@@ -106,6 +138,18 @@ export default function ProductForm({
             </option>
           ))}
       </select>
+
+      {propertiesToFill.length > 0 &&
+        propertiesToFill.map((p) => (
+          <div className="flex gap-1">
+            <div>{p.name}</div>
+            <select onChange={(ev) => setProductProp(p.name, ev.target.value)}>
+              {p.values.map((v) => (
+                <option value={v}>{v}</option>
+              ))}
+            </select>
+          </div>
+        ))}
 
       <label>Photos</label>
       <div className="mb-2 flex flex-wrap gap-1">

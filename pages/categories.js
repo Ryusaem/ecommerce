@@ -159,6 +159,7 @@ function Categories({ swal }) {
                 <button
                   className="btn-default"
                   onClick={() => removeProperty(index)}
+                  type="button"
                 >
                   Removes
                 </button>
@@ -166,45 +167,63 @@ function Categories({ swal }) {
             ))}
         </div>
 
-        <button
-          type="submit"
-          className="btn-primary"
-        >
-          Save
-        </button>
+        <div className="flex gap-1">
+          {editedCategory && (
+            <button
+              className="btn-default"
+              type="button"
+              onClick={() => {
+                setEditedCategory(null);
+                setName("");
+                setParentCategory("");
+              }}
+            >
+              Cancel
+            </button>
+          )}
+
+          <button
+            type="submit"
+            className="btn-primary"
+          >
+            Save
+          </button>
+        </div>
       </form>
-      <table className="basic mt-4">
-        <thead>
-          <tr>
-            <td>Category Name</td>
-            <td>Parent Category</td>
-            <td></td>
-          </tr>
-        </thead>
-        <tbody>
-          {categories.length > 0 &&
-            categories.map((category) => (
-              <tr>
-                <td>{category.name}</td>
-                <td>{category?.parent?.name}</td>
-                <td>
-                  <button
-                    className="btn-primary mr-1"
-                    onClick={() => editCategory(category)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn-primary"
-                    onClick={() => deleteCategory(category)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      {!editedCategory && (
+        <table className="basic mt-4">
+          <thead>
+            <tr>
+              <td>Category Name</td>
+              <td>Parent Category</td>
+              <td></td>
+            </tr>
+          </thead>
+          <tbody>
+            {categories.length > 0 &&
+              categories.map((category) => (
+                <tr>
+                  <td>{category.name}</td>
+                  <td>{category?.parent?.name}</td>
+                  <td>
+                    <button
+                      className="btn-primary mr-1"
+                      onClick={() => editCategory(category)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="btn-primary"
+                      onClick={() => deleteCategory(category)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      )}
     </Layout>
   );
 }

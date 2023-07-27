@@ -7,6 +7,7 @@ const ProductSchema = new Schema({
   price: { type: Number, required: true },
   images: [{ type: String }],
   category: { type: mongoose.Types.ObjectId, ref: "Category" },
+  properties: { type: Object },
 });
 
 // The Product model is exported so that it can be imported in other files

@@ -15,13 +15,17 @@ export default function ProductForm({
   price: existingPrice,
   images: existingImages,
   category: assignedCategory,
+  // properties is an object with the properties that are already filled for the product and we rename it to assignedProperties to avoid confusion with the productProperties state variable
+  properties: assignedProperties,
 }) {
   // The state variables are used to store the form field values
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
   // category is the id of the selected category
   const [category, setCategory] = useState(assignedCategory || "");
-  const [productProperties, setProductProperties] = useState({});
+  const [productProperties, setProductProperties] = useState(
+    assignedProperties || {}
+  );
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImages || []);
   // goToProducts is a boolean that is used to redirect the user to the products page after the product has been saved
@@ -43,7 +47,14 @@ export default function ProductForm({
     ev.preventDefault();
 
     // data is an object with the form field names and values
-    const data = { title, description, price, images, category };
+    const data = {
+      title,
+      description,
+      price,
+      images,
+      category,
+      properties: productProperties,
+    };
 
     if (_id) {
       //update
@@ -87,6 +98,15 @@ export default function ProductForm({
   // updateImagesOrder is called when the user drags and drops the images
   function updateImagesOrder(images) {
     setImages(images);
+  }
+
+  // setProductProp is a function that is used to update the productProperties state variable (which is an object) with the property name and value
+  function setProductProp(propName, value) {
+    setProductProperties((prev) => {
+      const newProductProps = { ...prev };
+      newProductProps[propName] = value;
+      return newProductProps;
+    });
   }
 
   // propertiesToFill is an array of objects with the properties that need to be filled for the selected category and its parents
@@ -143,7 +163,10 @@ export default function ProductForm({
         propertiesToFill.map((p) => (
           <div className="flex gap-1">
             <div>{p.name}</div>
-            <select onChange={(ev) => setProductProp(p.name, ev.target.value)}>
+            <select
+              value={productProperties[p.name]}
+              onChange={(ev) => setProductProp(p.name, ev.target.value)}
+            >
               {p.values.map((v) => (
                 <option value={v}>{v}</option>
               ))}

@@ -90,6 +90,14 @@ function Categories({ swal }) {
     });
   }
 
+  function removeProperty(indexToRemove) {
+    setProperties((prev) => {
+      return [...prev].filter((p, pIndex) => {
+        return pIndex !== indexToRemove;
+      });
+    });
+  }
+
   return (
     <Layout>
       <h1>Categories</h1>
@@ -148,7 +156,12 @@ function Categories({ swal }) {
                   }
                   placeholder="values, comma separated"
                 />
-                <button className="btn-default">Removes</button>
+                <button
+                  className="btn-default"
+                  onClick={() => removeProperty(index)}
+                >
+                  Removes
+                </button>
               </div>
             ))}
         </div>

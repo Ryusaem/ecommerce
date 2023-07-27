@@ -11,26 +11,28 @@ export default async function handle(req, res) {
 
   if (method === "POST") {
     // Get the name of the category from the request body. It's like req.body.name
-    const { name, parentCategory } = req.body;
+    const { name, parentCategory, properties } = req.body;
 
     // Create a new category document in the database with the name provided
     const categoryDoc = await Category.create({
       name,
-      parent: parentCategory,
+      parent: parentCategory || undefined,
+      properties,
     });
     res.json(categoryDoc);
   }
 
   if (method === "PUT") {
     // req.body is the data sent by the client and we need to destructure it into name and parentCategory, and _id
-    const { name, parentCategory, _id } = req.body;
+    const { name, parentCategory, properties, _id } = req.body;
 
     // Update the category with the id provided with the name and parentCategory provided
     const categoryDoc = await Category.updateOne(
       { _id },
       {
         name,
-        parent: parentCategory,
+        parent: parentCategory || undefined,
+        properties,
       }
     );
     res.json(categoryDoc);

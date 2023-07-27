@@ -25,7 +25,14 @@ function Categories({ swal }) {
 
   async function saveCategory(ev) {
     ev.preventDefault();
-    const data = { name, parentCategory };
+    const data = {
+      name,
+      parentCategory,
+      properties: properties.map((p) => ({
+        name: p.name,
+        values: p.values.split(","),
+      })),
+    };
     if (editedCategory) {
       // If we are editing a category, we need to send the id and data._id is the id of the category
       data._id = editedCategory._id;
@@ -37,6 +44,8 @@ function Categories({ swal }) {
     }
 
     setName("");
+    setParentCategory("");
+    setProperties([]);
     fetchCategories();
   }
 

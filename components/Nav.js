@@ -10,6 +10,11 @@ export default function Nav() {
   const router = useRouter();
   // pathname is a specific property of the router object that contains the path of the current URL (destructuring)
   const { pathname } = router;
+
+  async function logout() {
+    await router.push("/");
+    await signOut();
+  }
   return (
     // aside is a tag for sidebars
     <aside className="text-white p-4 pr-0">
@@ -147,7 +152,7 @@ export default function Nav() {
 
         <button
           className={inactiveLink}
-          onClick={() => signOut()}
+          onClick={logout}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

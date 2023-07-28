@@ -23,10 +23,6 @@ label {
     @apply text-gray-600 text-sm;
 }
 
-.btn-primary {
-    @apply bg-primary text-white px-3 py-1 rounded-md;
-}
-
 table.basic {
     @apply w-full bg-white rounded-sm shadow-md;
 }
@@ -40,7 +36,11 @@ table.basic tr td{
 }
 
 table.basic a {
-    @apply text-white px-3 rounded-md inline-flex mx-1 items-center gap-1 bg-gray-700 text-sm py-1;
+    @apply px-3 rounded-md inline-flex mx-1 items-center gap-1 text-sm py-1;
+}
+
+.btn-primary {
+    @apply bg-primary text-white px-3 py-1 rounded-md shadow-sm;
 }
 
 .btn-default, .btn-red {
@@ -48,9 +48,9 @@ table.basic a {
 }
 
 .btn-red {
-    @apply bg-red-800 text-white;
+    @apply bg-red-200 text-red-600 px-4 rounded-sm shadow-sm;
 }
 
 .btn-default {
-    @apply bg-gray-500 text-white;
+    @apply bg-white text-gray-800 px-4 rounded-sm border border-gray-200 shadow-sm;
 }

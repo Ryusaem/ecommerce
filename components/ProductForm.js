@@ -161,16 +161,18 @@ export default function ProductForm({
 
       {propertiesToFill.length > 0 &&
         propertiesToFill.map((p) => (
-          <div className="flex gap-1">
-            <div>{p.name}</div>
-            <select
-              value={productProperties[p.name]}
-              onChange={(ev) => setProductProp(p.name, ev.target.value)}
-            >
-              {p.values.map((v) => (
-                <option value={v}>{v}</option>
-              ))}
-            </select>
+          <div className="">
+            <label className="capitalize">{p.name}</label>
+            <div>
+              <select
+                value={productProperties[p.name]}
+                onChange={(ev) => setProductProp(p.name, ev.target.value)}
+              >
+                {p.values.map((v) => (
+                  <option value={v}>{v}</option>
+                ))}
+              </select>
+            </div>
           </div>
         ))}
 
@@ -185,7 +187,7 @@ export default function ProductForm({
             images.map((link) => (
               <div
                 key={link}
-                className="h-24"
+                className="h-24 bg-white p-4 shadow-sm rounded-sm border border-gray-200"
               >
                 <img
                   src={link}
@@ -200,7 +202,7 @@ export default function ProductForm({
             <Spinner />
           </div>
         )}
-        <label className="w-24 h-24 text-center cursor-pointer flex items-center justify-center text-sm gap-1 text-gray-500 rounded-lg bg-gray-200">
+        <label className="w-24 h-24 text-center cursor-pointer flex flex-col items-center justify-center text-sm gap-1 text-primary rounded-sm bg-white shadow-sm border border-primary">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

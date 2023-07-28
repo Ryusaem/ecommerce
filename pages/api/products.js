@@ -1,5 +1,6 @@
 import { mongooseConnect } from "@/lib/mongoose";
 import { Product } from "@/models/Product";
+import { isAdminRequest } from "./auth/[...nextauth]";
 
 export default async function handle(req, res) {
   // req.method is the HTTP method of the request
@@ -10,6 +11,7 @@ export default async function handle(req, res) {
 
   // connect to MongoDB by calling the mongooseConnect function
   await mongooseConnect();
+  await isAdminRequest(req, res);
 
   if (method === "GET") {
     // check if the query string contains an id parameter and if so, return the product with the given id from MongoDB by calling the findOne method of the Product model and passing the id as an argument to the query object

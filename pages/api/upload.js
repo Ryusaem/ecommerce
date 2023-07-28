@@ -10,10 +10,14 @@ import fs from "fs";
 
 // mime-types is a library to get the MIME type of a file based on its extension
 import mime from "mime-types";
+import { mongooseConnect } from "@/lib/mongoose";
+import { isAdminRequest } from "./auth/[...nextauth]";
 
 const bucketName = "ryusaem-next-ecommerce";
 
 export default async function handle(req, res) {
+  await mongooseConnect();
+  await isAdminRequest(req, res);
   // Form is an instance of multiparty.Form that will parse the multipart/form-data request
   const form = new multiparty.Form();
 

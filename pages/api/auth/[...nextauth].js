@@ -32,9 +32,12 @@ export const authOptions = {
 
 export default NextAuth(authOptions);
 
+// isAdminRequest is a helper function that you can use in your API routes to check if the user is an admin
 export async function isAdminRequest(req, res) {
+  //getServerSession is a helper function that you can use in your API routes to get the session object for the current request. Here we use it to get the user's email address.
   const session = await getServerSession(req, res, authOptions);
 
+  // Only allow logins if the user is in this list. adminEmails is a list of email addresses that are allowed to log in.
   if (!adminEmails.includes(session?.user?.email)) {
     res.status(401);
     res.end();

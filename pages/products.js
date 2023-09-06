@@ -4,8 +4,12 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function Products() {
+  // products will contain an array of products from the database.
   const [products, setProducts] = useState([]);
   useEffect(() => {
+    // step by step: axios will make a GET request to /api/products (which contain the information on our products from the database).
+    // Then we will get a response from the server.
+    // Then we will set the "products state" from the response we will get.
     axios.get("/api/products").then((response) => {
       setProducts(response.data);
     });

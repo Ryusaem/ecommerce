@@ -1,5 +1,9 @@
 import Link from "next/link";
 
+// GOAL: Create a logo component that will display the logo and the name of the app.
+
+// we use it in Layout.js and Nav.js
+
 export default function Logo() {
   return (
     <Link
@@ -13,7 +17,7 @@ export default function Logo() {
         viewBox="0 0 24 24"
         strokeWidth={1.5}
         stroke="currentColor"
-        className="w-6 h-6"
+        className="w-6 h-6 mt-3 ml-1 md:mt-0 md:ml-0"
       >
         <path
           strokeLinecap="round"

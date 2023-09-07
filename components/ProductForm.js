@@ -1,19 +1,32 @@
 import { useEffect, useState } from "react";
+// useRouter is a hook from next/router that allows to get the current route
 import { useRouter } from "next/router";
+
+// ReactSortable is a component that allows to drag and drop elements
+import { ReactSortable } from "react-sortablejs";
+
 // axios is a library to make HTTP requests
 import axios from "axios";
 // Spinner is a component that shows a loading spinner
 import Spinner from "./Spinner";
-// ReactSortable is a component that allows to drag and drop elements
-import { ReactSortable } from "react-sortablejs";
+
+// GOAL: Create a form component that will allow to CREATE a NEW product or EDIT an existing product.
+
+// - We use it in products/edit/[...id].js: contain the form to edit a product
+// - We use it in new.js: contain the form to create a new product
 
 export default function ProductForm({
   // _id is the id of the product that is being edited (if any) and is used to fetch the product data
   _id,
+  // why did we rename title to existingTitle? Because we already have a state variable called title
   title: existingTitle,
+  // why did we rename description to existingDescription? Because we already have a state variable called description
   description: existingDescription,
+  // why did we rename price to existingPrice? Because we already have a state variable called price
   price: existingPrice,
+  // why did we rename images to existingImages? Because we already have a state variable called images
   images: existingImages,
+  //why assignedCategory? Because we already have a state variable called category
   category: assignedCategory,
   // properties is an object with the properties that are already filled for the product and we rename it to assignedProperties to avoid confusion with the productProperties state variable
   properties: assignedProperties,
@@ -28,16 +41,21 @@ export default function ProductForm({
   );
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImages || []);
-  // goToProducts is a boolean that is used to redirect the user to the products page after the product has been saved
-  const [goToProducts, setGoToProducts] = useState(false);
-  // isUploading is a boolean that is used to show a spinner while the images are being uploaded
-  const [isUploading, setIsUploading] = useState(false);
-  const router = useRouter();
   // categories is an array of objects with the category data (name, properties, etc.)
   const [categories, setCategories] = useState([]);
 
-  // Fetch the categories from the API
+  // goToProducts is a boolean that is used to redirect the user to the products page after the product has been saved
+  const [goToProducts, setGoToProducts] = useState(false);
+
+  // isUploading is a boolean that is used to show a spinner while the images are being uploaded
+  const [isUploading, setIsUploading] = useState(false);
+
+  // router is an object that contains information about the current route
+  const router = useRouter();
+
+  // FETCH the categories from the API every time the component is rendered
   useEffect(() => {
+    // "result" is an object with the response data (it contain the categories)
     axios.get("/api/categories").then((result) => setCategories(result.data));
   }, []);
 
@@ -56,19 +74,20 @@ export default function ProductForm({
       properties: productProperties,
     };
 
+    // If the product has an id, it means that we are editing an existing product and if the id is not present, it means that we are creating a new product
     if (_id) {
-      //update
+      //UPDATE
+      // Send a PUT request to the API endpoint with the form data
       await axios.put("/api/products/", { ...data, _id });
     } else {
-      //create
-
+      //CREATE
       // Send a POST request to the API endpoint with the form data
       await axios.post("/api/products", data);
     }
     setGoToProducts(true);
   }
 
-  // go to products page after save
+  // REDIRECT to products page after save
   if (goToProducts) {
     router.push("/products");
   }
@@ -78,32 +97,46 @@ export default function ProductForm({
     // ev.target.files is an array of the selected files (multiple files can be selected)
     const files = ev.target?.files;
 
-    // Create a FormData object, which will be sent as the request body to the API endpoint /api/upload.js when the form is submitted
+    // Create a FormData object, which will be sent as the request body to the API endpoint /api/upload.js when the form is submitted.
+    // a FormData is a special object that allows to send files as the request body of a POST request. It contains the files that will be uploaded
+    // a request body is the data that is sent to the API endpoint. It can be a string, an object, a file, etc.
     if (files?.length > 0) {
+      // Set isUploading to true to show the spinner
       setIsUploading(true);
+
+      // our data will contain the files that will be uploaded
       const data = new FormData();
-      // Append the files to the FormData object
+
+      // Append the files to the FormData object (our variable called data).
+      // Every file is appended to the FormData object (our variable called data with the name "files"). "files" is the name of the field that will be sent to the API endpoint /api/upload.js
       for (const file of files) {
         data.append("files", file);
       }
-      // Send a POST request to the API endpoint /api/upload.js with the FormData object as the request body (the files will be sent as multipart/form-data)
+
+      // Send a POST request to the API endpoint /api/upload.js with the FormData object (our variable called data) as the request body (the files will be sent as multipart/form-data)
       const res = await axios.post("/api/upload", data);
+
+      // [...oldImages, ...res.data.links] is an array of strings with the links of the uploaded images. We use the spread operator to merge the old images with the new images
       setImages((oldImages) => {
         return [...oldImages, ...res.data.links];
       });
+
+      // Set isUploading to false to hide the spinner
       setIsUploading(false);
     }
   }
 
-  // updateImagesOrder is called when the user drags and drops the images
+  // updateImagesOrder is called when the user drags and drops the images. How can we use the drag and drop feature? We use the ReactSortable component. So this function will be use inside a ReactSortable component
   function updateImagesOrder(images) {
     setImages(images);
   }
 
-  // setProductProp is a function that is used to update the productProperties state variable (which is an object) with the property name and value
+  // setProductProp is a function that is used to update the productProperties state variable (the state variable that contains the properties that are already filled for the product). It means that when the user selects a value for a property, the productProperties state variable will be updated
   function setProductProp(propName, value) {
     setProductProperties((prev) => {
+      // prev is the previous state of the productProperties state variable. Here we create a new object (newProductProps) with the previous state  and we update the property that was changed
       const newProductProps = { ...prev };
+      // propName is the name of the property that was changed and value is the new value of the property. We update the property that was changed
       newProductProps[propName] = value;
       return newProductProps;
     });
@@ -111,15 +144,18 @@ export default function ProductForm({
 
   // propertiesToFill is an array of objects with the properties that need to be filled for the selected category and its parents
   const propertiesToFill = [];
+
   // If the category is selected, find the category data and the parent categories data. categories is an array of objects with the category data (name, properties, etc.) and category is the id of the selected category
   if (categories.length > 0 && category) {
-    // Find the category data
+    // catInfo will contain the category data of the selected category
     let catInfo = categories.find(({ _id }) => _id === category);
-    // Add the properties of the category and its parents to the propertiesToFill array
+
+    // Add the properties of the category and its parents to the "propertiesToFill" array.
     propertiesToFill.push(...catInfo.properties);
-    // Loop through the parent categories until there are no more parents
+
+    // Loop through the parent categories until there are no more parents.
     while (catInfo?.parent?._id) {
-      // Find the parent category data
+      // Find the parent category data.
       const parentCat = categories.find(
         ({ _id }) => _id === catInfo?.parent?._id
       );
@@ -131,23 +167,29 @@ export default function ProductForm({
   }
 
   return (
+    // When the form is submitted, the saveProduct function is called
     <form onSubmit={saveProduct}>
       <label>Product name</label>
       <input
         type="text"
         placeholder="product name"
-        // value is the state variable
+        // value is the state variable "title"
         value={title}
-        // ev.target.value is the value of the input field
+        // ev.target.value is the value of the input field. So when the user types in the input field, the title state variable will be updated
         onChange={(ev) => setTitle(ev.target.value)}
       />
 
       <label>Category</label>
       <select
+        // value is the state variable "category"
         value={category}
+        // ev.target.value is the value of the select field. So when the user selects a category, the category state variable will be updated
         onChange={(ev) => setCategory(ev.target.value)}
       >
+        {/* The first option is "Uncategorized" and the other options are the categories */}
         <option value="">Uncategorized</option>
+
+        {/* we loop through the categories and we create an option for each category */}
         {categories.length > 0 &&
           categories.map((category) => (
             <option
@@ -159,15 +201,21 @@ export default function ProductForm({
           ))}
       </select>
 
+      {/* Loop through the properties that need to be filled for the selected category and its parents */}
+      {/* properties contain properties like color, size, etc. */}
       {propertiesToFill.length > 0 &&
         propertiesToFill.map((p) => (
           <div className="">
             <label className="capitalize">{p.name}</label>
+
             <div>
               <select
+                // value is the value of the property that is already filled for the product (if any) (for example: "red")
                 value={productProperties[p.name]}
+                // When the user selects a value for the property, the productProperties state variable will be updated
                 onChange={(ev) => setProductProp(p.name, ev.target.value)}
               >
+                {/* We loop through the values of the property (for example: "red", "blue", etc.) and we create an option for each value */}
                 {p.values.map((v) => (
                   <option value={v}>{v}</option>
                 ))}

@@ -3,27 +3,47 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Logo from "./Logo";
 
+// GOAL: create a sidebar with links to the dashboard, products, categories, orders, and settings
+
 export default function Nav({ show }) {
   // inactiveLink and activeLink are classes for the links
+  // when we are on the current page, we want to highlight the link
   const inactiveLink = "flex gap-1 p-1";
   const activeLink = inactiveLink + " bg-highlight text-black rounded-sm";
+
+  // inactiveIcon and activeIcon are classes for the icons
+  // when we are on the current page, we want to highlight the icon
   const inactiveIcon = "w-6 h-6";
   const activeIcon = inactiveIcon + " text-primary";
 
-  // router is the entire router object
+  // using router will allow us to get the current path
   const router = useRouter();
   // pathname is a specific property of the router object that contains the path of the current URL (destructuring)
   const { pathname } = router;
 
+  // logout is a function that will sign the user out
   async function logout() {
+    // router.push("/") mean that we are redirecting the user to the home page
     await router.push("/");
+    // signOut is a function from next-auth/react that will sign the user out
     await signOut();
   }
+
   return (
     // aside is a tag for sidebars
     <aside
       className={
+        // if show is true, we want to show the sidebar, otherwise we want to hide it.
+        // left-0: we want to align the sidebar to the left
+        // -left-full: we want to hide the sidebar
         (show ? "left-0" : "-left-full") +
+        // top-0: Aligns the top of the <aside> with the top of its containing element.
+        // fixed: Fixes the position of the <aside> relative to the browser window.
+        // w-full: Makes the <aside> take the full width of its containing element.
+        // h-full: Makes the <aside> take the full height of its containing element.
+        // md:static: On medium-sized screens and larger (md:), this makes the <aside> have a static position (i.e., it scrolls with the rest of the content and it will always visible).
+        // md:w-auto: On medium-sized screens and larger, this makes the <aside> take an automatic width based on its content rather than filling its containing element.
+        // transition-all: Smoothens any transitions that might affect the <aside>, for instance, when changing its position.
         " top-0 text-gray-500 p-4 fixed w-full bg-bgGray h-full md:static md:w-auto transition-all"
       }
     >

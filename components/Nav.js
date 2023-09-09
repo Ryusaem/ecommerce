@@ -5,6 +5,15 @@ import Logo from "./Logo";
 
 // GOAL: create a sidebar with links to the dashboard, products, categories, orders, and settings
 
+// Algorithm:
+// 1. Create a Nav component
+// 2. Create a Link component for each page
+// 3. Create a logout button
+// 4. Create a function that will sign the user out
+// 5. Create a function that will hide and show the sidebar (for mobile view)
+// 6. Create a function that will highlight the current page
+// 7. Create a function that will redirect the user to the home page
+
 export default function Nav({ show }) {
   // inactiveLink and activeLink are classes for the links
   // when we are on the current page, we want to highlight the link

@@ -16,6 +16,7 @@ export default function OrdersPage() {
   return (
     <Layout>
       <h1>Orders</h1>
+
       <table className="basic">
         <thead>
           <tr>

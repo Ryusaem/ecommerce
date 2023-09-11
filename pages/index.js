@@ -1,5 +1,5 @@
 // Image is a component from next.js, it will optimize the image for us
-import Image from "next/image";
+// import Image from "next/image";
 
 import { useSession } from "next-auth/react";
 
@@ -24,7 +24,7 @@ export default function Home() {
 
         {/* it will display the user's image  and the user's name*/}
         <div className="flex bg-gray-300 gap-1 text-black">
-          <Image
+          <img
             src={session?.user?.image}
             alt=""
             className="w-6 h-6 rounded-full"

@@ -1,5 +1,5 @@
 // Image is a component that allows to show images
-import Image from "next/image";
+// import Image from "next/image";
 
 import { useEffect, useState } from "react";
 // useRouter is a hook from next/router that allows to get the current route
@@ -290,7 +290,7 @@ export default function ProductForm({
                 key={link}
                 className="h-24 bg-white p-4 shadow-sm rounded-sm border border-gray-200"
               >
-                <Image
+                <img
                   src={link}
                   alt=""
                   className="rounded-lg"

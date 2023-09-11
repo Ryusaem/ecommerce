@@ -34,6 +34,9 @@ export const authOptions = {
   //adapter is for customizing the database that NextAuth uses to store sessions and users. Example: You can use it to store sessions and users in a MongoDB database.
   adapter: MongoDBAdapter(clientPromise),
 
+  // secret is for configuring the secret that NextAuth uses to encrypt cookies and tokens. Example: You can use it to set the secret from an environment variable.
+  secret: process.env.NEXTAUTH_SECRET,
+
   // callbacks is for customizing the session object that is returned to the client. Example
   callbacks: {
     // session is for customizing the session object that is returned to the client. Example: You can use it to add the user's email address to the session object. Here we add the user's email address to the session object if they are in the adminEmails list.

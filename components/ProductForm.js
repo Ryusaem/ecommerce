@@ -1,3 +1,6 @@
+// Image is a component that allows to show images
+import Image from "next/image";
+
 import { useEffect, useState } from "react";
 // useRouter is a hook from next/router that allows to get the current route
 import { useRouter } from "next/router";
@@ -243,7 +246,10 @@ export default function ProductForm({
       {/* For example if we have 2 properties (color and size), we will have 2 select fields */}
       {propertiesToFill.length > 0 &&
         propertiesToFill.map((p) => (
-          <div className="">
+          <div
+            className=""
+            key={p.name}
+          >
             <label className="capitalize">{p.name}</label>
 
             <div>
@@ -255,7 +261,12 @@ export default function ProductForm({
               >
                 {/* We loop through the values of the property (for example: "red", "blue", etc.) and we create an option for each value */}
                 {p.values.map((v) => (
-                  <option value={v}>{v}</option>
+                  <option
+                    value={v}
+                    key={v}
+                  >
+                    {v}
+                  </option>
                 ))}
               </select>
             </div>
@@ -279,7 +290,7 @@ export default function ProductForm({
                 key={link}
                 className="h-24 bg-white p-4 shadow-sm rounded-sm border border-gray-200"
               >
-                <img
+                <Image
                   src={link}
                   alt=""
                   className="rounded-lg"

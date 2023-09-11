@@ -30,7 +30,7 @@ export default function OrdersPage() {
           {/* We'll use the map method to iterate over the orders array and render a table row for each order. */}
           {orders.length > 0 &&
             orders.map((order) => (
-              <tr>
+              <tr key={order._id}>
                 {/* We'll use the toLocaleString method to format the date. */}
                 <td>{new Date(order.createdAt).toLocaleString()}</td>
                 <td className={order.paid ? "text-green-600" : "text-red-600"}>

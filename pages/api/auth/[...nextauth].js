@@ -20,7 +20,7 @@ import GoogleProvider from "next-auth/providers/google";
 // 4. If the user is in the list (adminEmails), return the session object. Otherwise, return false.
 
 // Only allow logins if the user is in this list
-const adminEmails = ["comptedunet@gmail.com"];
+const adminEmails = ["comptedunet@gmail.com", "test.altrh@gmail.com"];
 
 export const authOptions = {
   // providers is for configuring the authentication providers that NextAuth uses. Here we configure the Google OAuth provider so that users can log in with their Google account.
